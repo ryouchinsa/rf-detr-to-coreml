@@ -199,6 +199,11 @@ rfdetr >=1.5.0
 
 Tested with: Python 3.12, torch 2.7.0, coremltools 8.1, rfdetr 1.5.1
 
+## Acknowledgments
+
+- [timnielen/rf-detr](https://github.com/timnielen/rf-detr) — first demonstrated that RF-DETR can be converted to CoreML by refactoring deformable attention to stay within CoreML's rank-5 tensor limit. Our implementation takes a different approach (runtime monkey-patches instead of forking), but the core insight came from studying this work. See also [rf-detr#318](https://github.com/roboflow/rf-detr/issues/318).
+- [Roboflow](https://github.com/roboflow/rf-detr) — for open-sourcing RF-DETR.
+
 ## License
 
 Apache 2.0
