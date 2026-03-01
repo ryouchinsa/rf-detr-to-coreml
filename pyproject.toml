@@ -44,9 +44,9 @@ dependencies = [
 rfdetr-coreml = "rfdetr_coreml.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/landchenxuan/rf-dert-to-coreml"
-Repository = "https://github.com/landchenxuan/rf-dert-to-coreml"
-Issues = "https://github.com/landchenxuan/rf-dert-to-coreml/issues"
+Homepage = "https://github.com/landchenxuan/rf-detr-to-coreml"
+Repository = "https://github.com/landchenxuan/rf-detr-to-coreml"
+Issues = "https://github.com/landchenxuan/rf-detr-to-coreml/issues"
 
 [tool.setuptools.packages.find]
 include = ["rfdetr_coreml*"]

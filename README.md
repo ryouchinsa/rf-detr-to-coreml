@@ -5,8 +5,8 @@ Export [RF-DETR](https://github.com/roboflow/rf-detr) v1.5.1 **detection + segme
 ## Installation
 
 ```bash
-git clone https://github.com/landchenxuan/rf-dert-to-coreml.git
-cd rf-dert-to-coreml
+git clone https://github.com/landchenxuan/rf-detr-to-coreml.git
+cd rf-detr-to-coreml
 pip install -e .
 ```
 
@@ -181,7 +181,7 @@ Internal steps:
 ## Project Structure
 
 ```
-rf-dert-to-coreml/
+rf-detr-to-coreml/
 ├── rfdetr_coreml/              # Python package (monkey-patch overlay)
 │   ├── __init__.py             # Auto-applies all patches on import
 │   ├── patches.py              # 3 runtime patches (6D→5D, bicubic→bilinear)
