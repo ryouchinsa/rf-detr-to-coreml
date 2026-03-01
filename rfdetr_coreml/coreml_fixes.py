@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 _applied = False
 
 
-def apply_coremltools_patches():
+def apply_coremltools_patches() -> None:
+    """Apply monkey-patches for coremltools bugs that block RF-DETR conversion."""
     global _applied
     if _applied:
         return

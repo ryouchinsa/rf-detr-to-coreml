@@ -20,8 +20,9 @@ rf-detr/
 # Compiled Swift binary
 validate_coreml
 
-# Contains API key
+# Contains API key or user-specific paths
 download_roboflow_model.swift
+compare_bird_photos.py
 
 # Claude Code working files
 .claude/

@@ -216,8 +216,14 @@ def _patch_bicubic_to_bilinear():
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
-def apply_rfdetr_patches():
-    """Apply all three patches to make rfdetr CoreML-compatible."""
+def apply_rfdetr_patches() -> None:
+    """Apply all runtime patches to make rfdetr CoreML-compatible.
+
+    Patches applied:
+      A) MSDeformAttn.forward — merge batch+heads to keep tensors ≤ rank-5
+      B) ms_deform_attn_core — accept 5D (batch*heads merged) inputs
+      C) DinoV2 interpolation — bicubic → bilinear
+    """
     global _applied
     if _applied:
         return

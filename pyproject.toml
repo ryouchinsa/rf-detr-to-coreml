@@ -5,12 +5,34 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rfdetr-coreml"
 version = "0.1.0"
-description = "Export RF-DETR object detection models to Apple CoreML format"
+description = "Export RF-DETR object detection and segmentation models to Apple CoreML format"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"
 authors = [
     { name = "Xuan Chen" },
+]
+keywords = [
+    "coreml",
+    "rf-detr",
+    "object-detection",
+    "instance-segmentation",
+    "apple",
+    "neural-engine",
+    "model-conversion",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
     "torch>=2.4.0",
@@ -23,6 +45,8 @@ rfdetr-coreml = "rfdetr_coreml.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/landchenxuan/rf-dert-to-coreml"
+Repository = "https://github.com/landchenxuan/rf-dert-to-coreml"
+Issues = "https://github.com/landchenxuan/rf-dert-to-coreml/issues"
 
 [tool.setuptools.packages.find]
 include = ["rfdetr_coreml*"]

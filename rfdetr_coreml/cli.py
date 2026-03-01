@@ -26,7 +26,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main():
+def main() -> None:
+    """CLI entry point for rfdetr-coreml command."""
     parser = argparse.ArgumentParser(description="Export RF-DETR to CoreML")
     parser.add_argument(
         "--model",

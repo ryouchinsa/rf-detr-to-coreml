@@ -74,19 +74,26 @@ def _import_model_class(model_name):
     return getattr(module, class_name)
 
 
-def export_to_coreml(model_name, output_dir="output", precision="fp32", weights_path=None):
+def export_to_coreml(
+    model_name: str,
+    output_dir: str = "output",
+    precision: str = "fp32",
+    weights_path: str | None = None,
+) -> str:
     """
     Export an RF-DETR model to CoreML format.
 
     Args:
-        model_name: One of 'nano', 'small', 'medium', 'base', 'large'
-        output_dir: Directory to save the .mlpackage
-        precision: 'fp16' or 'fp32' (default fp32; fp16 has precision issues
-                   with deformable attention — use with caution)
-        weights_path: Optional path to custom .pth weights file (fine-tuned model).
+        model_name: Model variant key from MODEL_REGISTRY (e.g. 'nano', 'base',
+                    'seg-nano'). Use ``list(MODEL_REGISTRY)`` to see all options.
+        output_dir: Directory to save the .mlpackage.
+        precision: 'fp16' or 'fp32' (default fp32). WARNING: fp16 has known
+                   catastrophic precision issues with deformable attention.
+        weights_path: Path to custom .pth weights (fine-tuned model).
                       If None, downloads pre-trained COCO weights.
+
     Returns:
-        Path to the saved .mlpackage
+        Path to the saved .mlpackage directory.
     """
     import coremltools as ct
 

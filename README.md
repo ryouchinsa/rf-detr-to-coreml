@@ -65,16 +65,16 @@ All benchmarks on **MacBook Pro M4 Pro (24 GB)**, coremltools 8.1, torch 2.7.0, 
 
 ### Segmentation Models
 
-| Model | Size | CoreML ALL | Box Diff (max) | Logit Diff (max) | Mask Diff (max) |
-|-------|------|------------|----------------|------------------|-----------------|
-| Seg-Nano | 117 MB | 16 ms | 0.000078 | 0.0003 | 0.0027 |
-| Seg-Small | 117 MB | 21 ms | 0.000397 | 0.0005 | 0.0063 |
-| Seg-Medium | 124 MB | 29 ms | 0.000259 | 0.0009 | 0.0115 |
-| Seg-Large | 125 MB | 38 ms | 0.000235 | 0.0007 | 0.0912 |
-| Seg-XLarge | 132 MB | 67 ms | 0.000443 | 0.0013 | 0.0233 |
-| Seg-2XLarge | 134 MB | 127 ms | 0.000372 | 0.0032 | 0.0508 |
+| Model | Size | PyTorch MPS | CoreML ALL | Speedup | Max Mask Diff |
+|-------|------|-------------|------------|---------|---------------|
+| Seg-Nano | 117 MB | 29.4 ms | 16 ms | **1.8x** | 0.0027 |
+| Seg-Small | 117 MB | 35.4 ms | 21 ms | **1.7x** | 0.0063 |
+| Seg-Medium | 124 MB | 46.7 ms | 29 ms | **1.6x** | 0.0115 |
+| Seg-Large | 125 MB | 60.8 ms | 38 ms | **1.6x** | 0.0912 |
+| Seg-XLarge | 132 MB | 99.8 ms | 67 ms | **1.5x** | 0.0233 |
+| Seg-2XLarge | 134 MB | 169.3 ms | 127 ms | **1.3x** | 0.0508 |
 
-> All segmentation models achieve near-lossless FP32 conversion. Outputs: boxes `(1,N,4)` + logits `(1,N,91)` + masks `(1,N,H/4,W/4)`.
+> All segmentation models achieve near-lossless FP32 conversion (box/logit diffs all < 0.005). Outputs: boxes `(1,N,4)` + logits `(1,N,91)` + masks `(1,N,H/4,W/4)`.
 
 ### FP16 Precision Issues
 
@@ -140,6 +140,12 @@ rf-dert-to-coreml/
 │   ├── coreml_fixes.py         # coremltools bug fixes (_cast, view)
 │   ├── export.py               # NormalizedWrapper + export logic
 │   └── cli.py                  # CLI entry point (rfdetr-coreml command)
+├── scripts/                    # Test and benchmark scripts
+│   ├── test_all_models.py      # Integration test for all detection models
+│   ├── test_seg_nano.py        # Segmentation model test
+│   ├── test_seg_all.py         # All segmentation models test
+│   ├── benchmark_base.py       # Detailed Base model benchmark
+│   └── validate_coreml.swift   # Native Swift/CoreML validation
 ├── export_coreml.py            # Convenience script (calls cli.main())
 ├── pyproject.toml              # pip install config
 ├── requirements.txt            # Pinned dependency versions (optional)

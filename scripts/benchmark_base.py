@@ -359,8 +359,8 @@ def main():
   {'Max':<35s} {np.max(fp32_diff):<15.4f} {np.max(fp16_diff):<15.4f} ~{np.max(fp16_diff):.0f} px (est.)
   {'Queries > 5px':<35s} {np.sum(fp32_diff > 5):<15d} {np.sum(fp16_diff > 5):<15d} ~{np.sum(fp16_diff > 5)} (est.)
 
-  * Roboflow 数据为估算值，基于相同精度(FP16)和分辨率。
-    Roboflow 可能使用不同的转换管线，实际表现可能不同。
+  * Roboflow data are estimates based on same precision (FP16) and resolution.
+    Roboflow may use a different conversion pipeline; actual results may differ.
 """)
 
 
