@@ -113,12 +113,15 @@ def export_to_coreml(model_name, output_dir="output", precision="fp32", weights_
         else:
             state_dict = checkpoint
 
-        # Detect num_classes from the classification head weight
+        # Detect num_classes from the classification head weight.
+        # RF-DETR internally adds +1 for background class, so
+        # class_embed.weight shape = (num_classes + 1, dim).
         num_classes = None
         for key in ("class_embed.0.weight", "class_embed.weight"):
             if key in state_dict:
-                num_classes = state_dict[key].shape[0]
-                logger.info(f"Detected num_classes={num_classes} from checkpoint key '{key}'")
+                num_classes = state_dict[key].shape[0] - 1
+                logger.info(f"Detected num_classes={num_classes} from checkpoint key '{key}' "
+                            f"(shape {state_dict[key].shape[0]} - 1 background)")
                 break
 
         if num_classes is not None:
