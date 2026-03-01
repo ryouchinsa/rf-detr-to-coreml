@@ -84,12 +84,24 @@ We used Apple's `MLComputePlan` API (macOS 14.4+) to inspect per-op device assig
 |-|-----------------|----------------------|---------------------------|
 | **Ops** | 605 (100%) | 0 (0%) | 893 |
 
-**Key finding: zero ops are Neural Engine capable.** Deformable attention's `resample` (grid_sample) op is GPU-only, and since it dominates the compute graph, CoreML routes the entire model to GPU. This is confirmed by timing:
+**Zero ops are Neural Engine capable** — not even standard ops like `conv`, `linear`, `matmul`, `softmax` that ANE normally supports. The root cause is **FP32 precision**, not any individual op:
+
+```
+grid_sample is extremely sensitive to FP16 precision loss
+  → entire model must be exported as FP32
+    → ANE hardware only operates in FP16
+      → all ops lose ANE eligibility, fall back to CPU
+        → only .all mode (adding GPU) provides acceleration
+```
+
+Standard transformers (ViT, BERT) don't have this problem — they can safely export to FP16 and run on ANE. RF-DETR's deformable attention uses `grid_sample` which amplifies FP16 errors catastrophically, forcing the entire model to FP32 and locking out ANE entirely.
+
+This is confirmed by timing:
 
 | Compute Units | Nano | Large | Explanation |
 |---------------|------|-------|-------------|
 | CPU_ONLY | 33.6 ms | 124.1 ms | CPU baseline |
-| CPU_AND_NE | 32.9 ms | 124.8 ms | Same as CPU (ANE unused) |
+| CPU_AND_NE | 32.9 ms | 124.8 ms | Same as CPU (ANE has nothing to run) |
 | **ALL (CPU+GPU)** | **11.1 ms** | **34.5 ms** | **3x faster (GPU active)** |
 
 Use `computeUnits = .all` (or `.cpuAndGPU`) in your app. Setting `.cpuAndNeuralEngine` provides no benefit for RF-DETR models.
