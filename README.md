@@ -2,6 +2,8 @@
 
 Read the [original repository](https://github.com/landchenxuan/rf-detr-to-coreml) for the details.
 
+We customized so that class names are included in the Core ML model.
+
 Export [RF-DETR](https://github.com/roboflow/rf-detr) object detection + instance segmentation models to Core ML model.
 
 ## Installation
