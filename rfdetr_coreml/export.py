@@ -116,36 +116,15 @@ def export_to_coreml(
     model_cls = _import_model_class(model_name)
 
     if weights_path:
-        # For custom weights: load checkpoint first to detect num_classes,
-        # then instantiate model with matching dimensions.
         logger.info(f"Loading custom weights from {weights_path}")
-        checkpoint = torch.load(weights_path, map_location="cpu", weights_only=False)
-        # Handle different checkpoint formats
-        if "model" in checkpoint:
-            state_dict = checkpoint["model"]
-        elif "state_dict" in checkpoint:
-            state_dict = checkpoint["state_dict"]
-        else:
-            state_dict = checkpoint
-
-        # Detect num_classes from the classification head weight.
-        # RF-DETR internally adds +1 for background class, so
-        # class_embed.weight shape = (num_classes + 1, dim).
-        num_classes = None
-        for key in ("class_embed.0.weight", "class_embed.weight"):
-            if key in state_dict:
-                num_classes = state_dict[key].shape[0] - 1
-                logger.info(f"Detected num_classes={num_classes} from checkpoint key '{key}' "
-                            f"(shape {state_dict[key].shape[0]} - 1 background)")
-                break
-
-        if num_classes is not None:
-            rfdetr_model = model_cls(pretrain_weights=None, num_classes=num_classes)
-        else:
-            rfdetr_model = model_cls(pretrain_weights=None)
-        rfdetr_model.model.model.load_state_dict(state_dict, strict=False)
+        rfdetr_model = model_cls(pretrain_weights=weights_path)
+        class_names = {}
+        for index, value in enumerate(rfdetr_model.model.class_names):
+            class_names[index] = value
     else:
         rfdetr_model = model_cls()
+        from rfdetr.assets.coco_classes import COCO_CLASSES
+        class_names = COCO_CLASSES
 
     logger.info(f"Model instantiated in {time.time() - t0:.1f}s")
 
@@ -200,6 +179,7 @@ def export_to_coreml(
     mlmodel.author = "rfdetr_coreml"
     mlmodel.short_description = f"RF-DETR {model_name} ({precision.upper()}{batch_desc}) — {resolution}x{resolution}"
     mlmodel.version = "1.5.1"
+    mlmodel.user_defined_metadata["names"] = str(class_names)
 
     logger.info(f"Converted in {time.time() - t0:.1f}s")
 
